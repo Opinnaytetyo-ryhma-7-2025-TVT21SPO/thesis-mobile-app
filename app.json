@@ -15,9 +15,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.oppari.ravinto-app",
-        "versionCode": 1
+        "backgroundColor": "#ffffff"
       },
       "package": "com.pahvone.ravintoapp"
     },
