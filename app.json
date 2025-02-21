@@ -8,6 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "owner":"opinnaytetyo-ryhma-7-2025-tvt21spo",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pahvone.ravintoapp"

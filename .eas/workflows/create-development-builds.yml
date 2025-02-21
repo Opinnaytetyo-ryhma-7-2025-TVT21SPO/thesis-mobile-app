@@ -1,0 +1,17 @@
+name: Create development builds
+
+on:
+  # Trigger on pushes to main branch
+  push:
+    branches: ['dev']
+  # And on pull requests starting with 'version-'
+  pull_request:
+    branches: ['main']
+
+jobs:
+  android_development_build:
+    name: Build Android
+    type: build
+    params:
+      platform: android
+      profile: development
