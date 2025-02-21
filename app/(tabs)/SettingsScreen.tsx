@@ -1,20 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Switch } from 'react-native';
+import { useTheme } from '@/components/ThemeContext'; // Adjust the import path as needed
+import { getStyles } from '@/components/styles'; // Adjust the import path as needed
 
-const SettingsScreen = () => {
+const SettingsScreen: React.FC = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
+  const styles = getStyles();
+
   return (
-    <View style={styles.container}>
-      <Text>Settings Screen</Text>
+    <View style={styles.pageContainer}>
+      <View style={styles.settingsContainer}>
+        <Text style={styles.textStyles}>Settings</Text>
+        <View style={styles.checkboxContainer}>
+          <Text style={styles.textStyles}>Dark Mode </Text>
+          <Switch
+            onValueChange={toggleTheme}
+            value={isDarkMode}
+          />
+        </View>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default SettingsScreen;
