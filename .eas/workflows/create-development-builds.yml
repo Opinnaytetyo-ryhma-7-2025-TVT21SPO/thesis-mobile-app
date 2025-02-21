@@ -1,12 +1,6 @@
 name: Create development builds
 
-on:
-  # Trigger on pushes to main branch
-  push:
-    branches: ['dev']
-  # And on pull requests starting with 'version-'
-  pull_request:
-    branches: ['main']
+  # Ajamalla eas workflow:run *insert tämän tiedoston polku* voidaan tehdä development buildi
 
 jobs:
   android_development_build:
