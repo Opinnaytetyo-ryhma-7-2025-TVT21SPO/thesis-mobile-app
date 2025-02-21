@@ -1,150 +1,61 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Platform, ScrollView } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
-import Block from '@/components/Block';
+import { View, ScrollView, TouchableOpacity, Text, Modal, Platform } from 'react-native';
+import BlockChart from '../../components/ui/BlockChart';
+import BlockProgress from '../../components/ui/BlockProgress';
+import { getStyles } from '../../components/styles';
+import { useTheme } from '../../components/ThemeContext';
 
 export default function HomeScreen() {
-  const [blockDimensions, setBlockDimensions] = useState({ width: 0, height: 0 });
+  const { isDarkMode } = useTheme();
+  const styles = getStyles();
 
-  const handleLayout = (event) => {
-    const { width, height } = event.nativeEvent.layout;
-    setBlockDimensions({ width, height });
+  const [blocks, setBlocks] = useState<{ type: 'chart' | 'progress'; id: number }[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const addBlock = (type: 'chart' | 'progress') => {
+    setBlocks([...blocks, { type, id: blocks.length }]);
+    setModalVisible(false);
+  };
+
+  const deleteBlock = (index: number) => {
+    setBlocks(blocks.filter((_, i) => i !== index));
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.grid}>
-      <Block>
-        <View onLayout={handleLayout} style={styles.chartContainer}>
-          <LineChart
-            data={{
-              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-              datasets: [
-                {
-                  data: [20, 45, 12, 80, 99, 43],
-                },
-              ],
-            }}
-            width={blockDimensions.width - 32} // Adjust width to fit within the Block
-            height={blockDimensions.height - 32} // Adjust height to fit within the Block
-            yAxisLabel=""
-            yAxisSuffix="kg"
-            chartConfig={{
-              backgroundColor: '#e26a00',
-              backgroundGradientFrom: '#fb8c00',
-              backgroundGradientTo: '#ffa726',
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: '6',
-                strokeWidth: '2',
-                stroke: '#ffa726',
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
+    <View style={styles.pageContainer}>
+      <ScrollView contentContainerStyle={styles.grid}>
+        {blocks.map((block, index) => (
+          block.type === 'chart' ? (
+            <BlockChart key={index} onDelete={() => deleteBlock(index)} />
+          ) : (
+            <BlockProgress key={index} onDelete={() => deleteBlock(index)} />
+          )
+        ))}
+      </ScrollView>
+      <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+        <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add Block</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={() => addBlock('chart')}>
+              <Text style={styles.modalButtonText}>Add BlockChart</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={() => addBlock('progress')}>
+              <Text style={styles.modalButtonText}>Add BlockProgress</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </Block>
-      <Block>
-        <View onLayout={handleLayout} style={styles.chartContainer}>
-          <LineChart
-            data={{
-              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-              datasets: [
-                {
-                  data: [95, 45, 122, 12, 99, 43],
-                },
-              ],
-            }}
-            width={blockDimensions.width - 32} // Adjust width to fit within the Block
-            height={blockDimensions.height - 32} // Adjust height to fit within the Block
-            yAxisLabel=""
-            yAxisSuffix="kg"
-            chartConfig={{
-              backgroundColor: '#e26a00',
-              backgroundGradientFrom: '#fb8c00',
-              backgroundGradientTo: '#ffa726',
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: '6',
-                strokeWidth: '2',
-                stroke: '#ffa726',
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-        </View>
-      </Block>
-      <Block>
-        <View onLayout={handleLayout} style={styles.chartContainer}>
-          <LineChart
-            data={{
-              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-              datasets: [
-                {
-                  data: [95, 45, 122, 12, 99, 43],
-                },
-              ],
-            }}
-            width={blockDimensions.width - 32} // Adjust width to fit within the Block
-            height={blockDimensions.height - 32} // Adjust height to fit within the Block
-            yAxisLabel=""
-            yAxisSuffix="kg"
-            chartConfig={{
-              backgroundColor: '#e26a00',
-              backgroundGradientFrom: '#fb8c00',
-              backgroundGradientTo: '#ffa726',
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: '6',
-                strokeWidth: '2',
-                stroke: '#ffa726',
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-        </View>
-      </Block>
-    </ScrollView>
+      </Modal>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  grid: {
-    flexDirection: Platform.OS === 'android' ? 'column' : 'row',
-    flexWrap: Platform.OS === 'web' ? 'wrap' : 'nowrap',
-    padding: 16,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  chartContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
