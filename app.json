@@ -2,6 +2,7 @@
   "expo": {
     "name": "ravinto-app",
     "slug": "ravinto-app",
+    "owner": "opinnaytetyo-ryhma-7-2025-tvt21spo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

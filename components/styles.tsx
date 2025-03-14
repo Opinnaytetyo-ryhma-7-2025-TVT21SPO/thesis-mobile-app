@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
-import { useTheme } from './ThemeContext'; // Adjust the import path as needed
+import { useTheme } from './ThemeContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,6 +15,46 @@ export const getStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: isDarkMode ? '#000' : '#fff',
+    },
+    topBar: {
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 16,
+      backgroundColor: isDarkMode ? '#333' : '#f8f8f8',
+    },
+    dateText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: isDarkMode ? '#fff' : '#000',
+      alignContent: 'center',
+    },
+    profileImage: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+    },
+    profileImageLarge: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      marginBottom: 16,
+    },
+    usernameText: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: isDarkMode ? '#fff' : '#000',
+      marginBottom: 16,
+    },
+    settingsButton: {
+      padding: 10,
+      backgroundColor: '#e26a00',
+      borderRadius: 5,
+    },
+    settingsButtonText: {
+      color: '#fff',
+      fontSize: 16,
     },
     index: {
       flex: 1,
@@ -88,41 +128,29 @@ export const getStyles = () => {
       alignItems: 'center',
       elevation: 5,
     },
-    addButtonText: {
-      color: '#fff',
-      fontSize: 24,
-      fontWeight: 'bold',
-    },
-    modalContainer: {
-      flex: 1,
-      justifyContent: 'flex-end', // Align to the bottom
-      alignItems: 'center',
-      backgroundColor: 'transparent', // Make background transparent
-    },
-    modalContent: {
+    recipeImage: {
       width: '100%',
-      padding: 20,
-      backgroundColor: isDarkMode ? '#333' : '#fff',
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      alignItems: 'center',
+      height: 150,
+      borderRadius: 10,
+      marginBottom: 8,
+      resizeMode: 'contain',
     },
-    modalTitle: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginBottom: 20,
-    },
-    modalButton: {
+    recipeImageLarge: {
       width: '100%',
-      padding: 10,
-      marginVertical: 5,
-      backgroundColor: '#e26a00',
-      borderRadius: 5,
-      alignItems: 'center',
+      height: 300,
+      borderRadius: 10,
+      marginBottom: 16,
     },
-    modalButtonText: {
-      color: '#fff',
+    recipeTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: isDarkMode ? '#fff' : '#000',
+    },
+    recipeDescription: {
       fontSize: 16,
+      color: isDarkMode ? '#fff' : '#000',
+      textAlign: 'center',
+      paddingHorizontal: 16,
     },
     settingsContainer: {
       flex: 1,

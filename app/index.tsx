@@ -11,12 +11,29 @@ export default function LoginScreen() {
       : require('../assets/images/logo.png')
   );
   const router = useRouter();
-  const styles = getStyles(colorScheme);
+  const styles = getStyles();
 
-  const handlePress = () => {
+  const handlePress = async () => {
     setLogo(require('../assets/images/logo2.png'));
+
+    // Fetch user ID from the database
+    // const fetchUserId = async () => {
+    //   const response = await fetch('https://example.com/api/user'); // Replace with your API endpoint
+    //   const data = await response.json();
+    //   return data.id;
+    // };
+
+    // Dummy data
+    const userId = Math.floor(Math.random() * 4) + 1;
+
+    // Uncomment the following lines to use the actual fetching logic
+    // const userId = await fetchUserId();
+
     setTimeout(() => {
-      router.replace('../(tabs)/HomeScreen');
+      router.replace({
+        pathname: '/Home',
+        params: { userId },
+      });
     }, 500); // Wait for 500 milliseconds (half a second)
   };
 

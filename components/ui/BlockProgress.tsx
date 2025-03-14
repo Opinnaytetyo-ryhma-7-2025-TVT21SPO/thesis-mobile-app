@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Text, LayoutChangeEvent, useColorScheme } from 'react-native';
+import { View, LayoutChangeEvent } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { getStyles } from '../styles';
 import { useTheme } from '../ThemeContext';
 
-interface BlockProps {
-  onDelete: () => void;
-}
-
-const BlockProgress: React.FC<BlockProps> = ({ onDelete }) => {
+const BlockProgress: React.FC = () => {
   const [blockDimensions, setBlockDimensions] = useState({ width: 0, height: 0 });
   const [progress, setProgress] = useState(0);
   const { isDarkMode } = useTheme();
@@ -38,9 +34,6 @@ const BlockProgress: React.FC<BlockProps> = ({ onDelete }) => {
         formatText={() => `${Math.round(progress * 100)}%`}
         textStyle={styles.progressText}
       />
-      <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
-        <Text style={styles.deleteButtonText}>X</Text>
-      </TouchableOpacity>
     </View>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Switch } from 'react-native';
-import { useTheme } from '@/components/ThemeContext'; // Adjust the import path as needed
-import { getStyles } from '@/components/styles'; // Adjust the import path as needed
+import { useTheme } from '@/components/ThemeContext';
+import { getStyles } from '@/components/styles';
 
 const SettingsScreen: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -12,7 +12,7 @@ const SettingsScreen: React.FC = () => {
       <View style={styles.settingsContainer}>
         <Text style={styles.textStyles}>Settings</Text>
         <View style={styles.checkboxContainer}>
-          <Text style={styles.textStyles}>Dark Mode </Text>
+          <Text style={styles.textStyles}>Dark Modeasdasdasdas </Text>
           <Switch
             onValueChange={toggleTheme}
             value={isDarkMode}
