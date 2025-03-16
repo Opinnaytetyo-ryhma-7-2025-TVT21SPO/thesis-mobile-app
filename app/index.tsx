@@ -1,47 +1,56 @@
-import React, { useState } from 'react';
-import { View, Pressable, Image, useColorScheme } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useFonts } from 'expo-font';
+import { View, Pressable, Image, Text, useColorScheme, StatusBar } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { getStyles } from '../components/styles'; // Adjust the import path as needed
+import { getStyles } from '../components/styles';
+import "../global.css";
+
+
 
 export default function LoginScreen() {
   const colorScheme = useColorScheme() || 'light';
-  const [logo, setLogo] = useState(
-    colorScheme === 'dark'
-      ? require('../assets/images/logo_dark.png')
-      : require('../assets/images/logo.png')
-  );
   const router = useRouter();
   const styles = getStyles();
 
-  const handlePress = async () => {
-    setLogo(require('../assets/images/logo2.png'));
-
-    // Fetch user ID from the database
-    // const fetchUserId = async () => {
-    //   const response = await fetch('https://example.com/api/user'); // Replace with your API endpoint
-    //   const data = await response.json();
-    //   return data.id;
-    // };
-
-    // Dummy data
-    const userId = Math.floor(Math.random() * 4) + 1;
-
-    // Uncomment the following lines to use the actual fetching logic
-    // const userId = await fetchUserId();
-
-    setTimeout(() => {
-      router.replace({
-        pathname: '/Home',
-        params: { userId },
-      });
-    }, 500); // Wait for 500 milliseconds (half a second)
-  };
-
+  useEffect(() => {
+    StatusBar.setBackgroundColor('#6464f1');
+    StatusBar.setBarStyle('light-content');
+  }, []);
+  
   return (
-    <View style={styles.index}>
-      <Pressable onPress={handlePress}>
-        <Image source={logo} style={styles.logo} />
-      </Pressable>
+    <View style={[styles.index, { justifyContent: 'flex-start', alignItems: 'flex-start' }]}>
+      <Image 
+      source={colorScheme === 'dark' 
+        ? require('../assets/images/bg_dark.png') 
+        : require('../assets/images/bg.png')} 
+      style={{ width: '100%', height: '100%', position: 'absolute', top: 0 }} 
+      />
+      {/* login stuff */}
+      <View className="h-full w-full flex justify-around pt-40 -pt-10 items-center">
+        {/*Google Logo*/}
+          <Animated.View entering={FadeInUp.delay(200).duration(1000).springify()}>
+            <Pressable 
+              className='flex items-center' 
+              onPress={() => {
+                {/*login logic here*/}
+              console.log('Google login pressed');
+                router.push('/Home');
+              
+              }}
+            >
+              <AntDesign 
+              name="google" 
+              size={24} 
+              color={colorScheme === 'dark' ? 'white' : 'black'} 
+              />
+            </Pressable>
+            <Text style={{ color: colorScheme === 'dark' ? 'white' : 'black' }}>
+              Login with Google
+            </Text>
+          </Animated.View>
+      </View>
     </View>
   );
 }

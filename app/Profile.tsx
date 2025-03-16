@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { getStyles } from '../../../components/styles';
-import { useTheme } from '../../../components/ThemeContext';
+import { getStyles } from '../components/styles';
+import { useTheme } from '../components/ThemeContext';
 import { useLocalSearchParams } from 'expo-router';
 
 export default function UserProfileScreen() {
@@ -11,9 +11,15 @@ export default function UserProfileScreen() {
   const navigation = useNavigation();
   const { userId } = useLocalSearchParams();
 
-  const handleSettingsPress = () => {
-    navigation.navigate('SettingsScreen');
-  };
+  useEffect(() => {
+          if (isDarkMode) {
+            StatusBar.setBackgroundColor('#171717');
+            StatusBar.setBarStyle('light-content');
+          } else {
+            StatusBar.setBackgroundColor('#f2f2f2');
+            StatusBar.setBarStyle('dark-content');
+          }
+        }, []);
 
   const profiles = [
     { userId: '1', username: 'User One', imageUrl: 'https://cdn.7tv.app/emote/01F6R3BYFG000AXK0HX1P7HDWX/4x.avif' },
@@ -37,7 +43,7 @@ export default function UserProfileScreen() {
       ) : (
       <Text style={styles.usernameText}>User not found</Text>
       )}
-      <TouchableOpacity style={styles.settingsButton} onPress={handleSettingsPress}>
+      <TouchableOpacity >
       <Text style={styles.settingsButtonText}>Go to Settings</Text>
       </TouchableOpacity>
     </View>

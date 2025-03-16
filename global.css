@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+    --color-blue-50: rgb(236, 236, 253);
+    --color-blue-100: rgb(195, 195, 249);
+    --color-blue-200: rgb(166, 166, 247);
+    --color-blue-300: rgb(125, 125, 243);
+    --color-blue-400: rgb(100, 100, 241);
+    --color-blue-500: rgb(61, 61, 237);
+    --color-blue-600: rgb(56, 56, 216);
+    --color-blue-700: rgb(43, 43, 168);
+    --color-blue-800: rgb(34, 34, 130);
+    --color-blue-900: rgb(26, 26, 100);
+
+    --color-orange-50: rgb(254, 247, 235);
+    --color-orange-100: rgb(253, 231, 192);
+    --color-orange-200: rgb(251, 220, 161);
+    --color-orange-300: rgb(250, 204, 118);
+    --color-orange-400: rgb(249, 194, 92);
+    --color-orange-500: rgb(247, 179, 51);
+    --color-orange-600: rgb(225, 163, 46);
+    --color-orange-700: rgb(175, 127, 36);
+    --color-orange-800: rgb(136, 98, 28);
+    --color-orange-900: rgb(104, 75, 21);
+
+    --color-blue-shifted-gray-50: rgb(250, 250, 252);
+    --color-blue-shifted-gray-100: rgb(239, 239, 244);
+    --color-blue-shifted-gray-200: rgb(231, 231, 239);
+    --color-blue-shifted-gray-300: rgb(219, 219, 232);
+    --color-blue-shifted-gray-400: rgb(213, 213, 227);
+    --color-blue-shifted-gray-500: rgb(202, 202, 220);
+    --color-blue-shifted-gray-600: rgb(184, 184, 200);
+    --color-blue-shifted-gray-700: rgb(143, 143, 156);
+    --color-blue-shifted-gray-800: rgb(111, 111, 121);
+    --color-blue-shifted-gray-900: rgb(85, 85, 92);
+
+    --color-green-50: rgb(240, 248, 237);
+    --color-green-100: rgb(209, 233, 198);
+    --color-green-200: rgb(187, 222, 170);
+    --color-green-300: rgb(157, 207, 132);
+    --color-green-400: rgb(137, 198, 108);
+    --color-green-500: rgb(108, 184, 71);
+    --color-green-600: rgb(98, 167, 65);
+    --color-green-700: rgb(77, 131, 50);
+    --color-green-800: rgb(59, 101, 39);
+    --color-green-900: rgb(45, 77, 30);
+
+    --color-purple-50: rgb(240, 237, 248);
+    --color-purple-100: rgb(210, 198, 233);
+    --color-purple-200: rgb(188, 170, 222);
+    --color-purple-300: rgb(157, 132, 207);
+    --color-purple-400: rgb(138, 108, 198);
+    --color-purple-500: rgb(109, 71, 184);
+    --color-purple-600: rgb(99, 65, 167);
+    --color-purple-700: rgb(77, 50, 131);
+    --color-purple-800: rgb(60, 39, 101);
+    --color-purple-900: rgb(46, 30, 77);
+    
+    --color-brown-yellow-50: rgb(250, 248, 236);
+    --color-brown-yellow-100: rgb(240, 234, 196);
+    --color-brown-yellow-200: rgb(233, 224, 167);
+    --color-brown-yellow-300: rgb(224, 209, 127);
+    --color-brown-yellow-400: rgb(217, 201, 102);
+    --color-brown-yellow-500: rgb(208, 187, 64);
+    --color-brown-yellow-600: rgb(189, 170, 58);
+    --color-brown-yellow-700: rgb(148, 133, 45);
+    --color-brown-yellow-800: rgb(114, 103, 35);
+    --color-brown-yellow-900: rgb(87, 79, 27);
+
+    --color-neutralLight: rgb(250, 251, 249);
+    --color-neutralLightHover: rgb(247, 249, 246);
+    --color-neutralLightActive: rgb(238, 242, 237);
+    --color-neutralNormal: rgb(201, 213, 196);
+    --color-neutralNormalHover: rgb(181, 192, 176);
+    --color-neutralNormalActive: rgb(161, 170, 157);
+    --color-neutralDark: rgb(151, 160, 147);
+    --color-neutralDarkHover: rgb(121, 128, 118);
+    --color-neutralDarkActive: rgb(90, 96, 88);
+    --color-neutralDarker: rgb(70, 75, 69);
+  
+}

@@ -1,5 +1,7 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { useTheme } from './ThemeContext';
+import '../global.css';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -10,30 +12,49 @@ export const getStyles = () => {
     textStyles: {
       color: isDarkMode ? '#fff' : '#000',
     },
+    tabBar: {
+      position: 'absolute',
+      bottom: Platform.OS === 'web' ? undefined : 25,
+      top: Platform.OS === 'web' ? "0.5%" : undefined,
+      maxWidth: Platform.OS === 'web' ? '30%' : undefined,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignContent: 'center',
+      backgroundColor: isDarkMode ? '#333' : '#f8f8f8',
+      marginHorizontal: Platform.OS === 'web' ? 'auto' : 20,
+      paddingVertical: 15,
+      borderRadius: 25,
+      borderCurve: 'continuous',
+      elevation: 10,
+      width: Platform.OS === 'web' ? '80%' : undefined,
+      left: Platform.OS === 'web' ? '10%' : undefined, // Center horizontally on web
+      right: Platform.OS === 'web' ? '10%' : undefined, // Center horizontally on web
+      ...(Platform.OS === 'web' && {
+        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', // Add drop shadow for web
+      }),
+    },
+    tabBarButton: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 4,
+    },
     pageContainer: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: isDarkMode ? '#000' : '#fff',
+      backgroundColor: isDarkMode ? '#171717' : undefined,
     },
-    topBar: {
-      width: '100%',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: 16,
-      backgroundColor: isDarkMode ? '#333' : '#f8f8f8',
+    searchBar: {
+      backgroundColor: isDarkMode ? '#fff' : '#000',
+      borderRadius: 50,
+      borderCurve: 'continuous'
     },
-    dateText: {
-      fontSize: 18,
-      fontWeight: 'bold',
+    categoryTitle: {
       color: isDarkMode ? '#fff' : '#000',
-      alignContent: 'center',
     },
-    profileImage: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
+    recipeTitle: {
+      color: isDarkMode ? '#fff' : '#000',
     },
     profileImageLarge: {
       width: 100,
@@ -46,15 +67,6 @@ export const getStyles = () => {
       fontWeight: 'bold',
       color: isDarkMode ? '#fff' : '#000',
       marginBottom: 16,
-    },
-    settingsButton: {
-      padding: 10,
-      backgroundColor: '#e26a00',
-      borderRadius: 5,
-    },
-    settingsButtonText: {
-      color: '#fff',
-      fontSize: 16,
     },
     index: {
       flex: 1,
@@ -72,7 +84,7 @@ export const getStyles = () => {
       minHeight: 250,
       minWidth: 350,
       maxHeight: Platform.OS === 'android' ? height / 3 : height / 4,
-      maxWidth: Platform.OS === 'android' ? width - 32 : (width / 3) - 32,
+      maxWidth: Platform.OS === 'android' ? width - 32 : width / 3 - 32,
       padding: 16,
       margin: 8,
       backgroundColor: isDarkMode ? '#333' : '#fff',
@@ -86,24 +98,6 @@ export const getStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    deleteButton: {
-      position: 'absolute',
-      top: 10,
-      right: 10,
-      width: 30,
-      height: 30,
-      borderRadius: 15,
-      backgroundColor: '#e26a00',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 2,
-      borderColor: '#cc5500', // Darker orange outline
-    },
-    deleteButtonText: {
-      color: '#fff',
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
     progressText: {
       fontSize: 18,
       fontWeight: 'bold',
@@ -112,21 +106,10 @@ export const getStyles = () => {
     grid: {
       flexDirection: Platform.OS === 'android' ? 'column' : 'row',
       flexWrap: Platform.OS === 'web' ? 'wrap' : 'nowrap',
+      marginTop: Platform.OS === 'web' ? "10%" : 0,
       padding: 16,
       justifyContent: 'flex-start',
       alignItems: 'center',
-    },
-    addButton: {
-      position: 'absolute',
-      bottom: 30,
-      right: 30,
-      width: 60,
-      height: 60,
-      borderRadius: 30,
-      backgroundColor: '#e26a00',
-      justifyContent: 'center',
-      alignItems: 'center',
-      elevation: 5,
     },
     recipeImage: {
       width: '100%',

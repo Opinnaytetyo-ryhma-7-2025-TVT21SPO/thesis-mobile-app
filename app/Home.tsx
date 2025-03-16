@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, Image, Pressable } from 'react-native';
-import { Link, router, useLocalSearchParams } from 'expo-router';
-import BlockChart from '../../components/ui/BlockChart';
-import BlockProgress from '../../components/ui/BlockProgress';
-import { getStyles } from '../../components/styles';
-import { useTheme } from '../../components/ThemeContext';
+import { View, ScrollView, Text, Image, Pressable, StatusBar } from 'react-native';
+import { Link, router, useLocalSearchParams, useNavigation } from 'expo-router';
+import BlockChart from '../components/ui/BlockChart';
+import BlockProgress from '../components/ui/BlockProgress';
+import { getStyles } from '../components/styles';
+import { useTheme } from '../components/ThemeContext';
 
 export default function HomeScreen() {
   const { isDarkMode } = useTheme();
   const styles = getStyles();
-  const currentDate = new Date().toLocaleDateString();
   const { userId } = useLocalSearchParams();
   const [images, setImage] = useState<{ image: string }[]>([]);
 
@@ -33,26 +32,20 @@ export default function HomeScreen() {
       fetchData();
     }, []);
 
-  const handlePress = () => {
-    router.push({
-      pathname: '/(tabs)/(user)/[userId]',
-      params: { userId: Array.isArray(userId) ? userId[0] : userId },
-    });
-  };
+    useEffect(() => {
+        if (isDarkMode) {
+          StatusBar.setBackgroundColor('#171717');
+          StatusBar.setBarStyle('light-content');
+        } else {
+          StatusBar.setBackgroundColor('#f2f2f2');
+          StatusBar.setBarStyle('dark-content');
+        }
+      }, []);
 
   const userProfile = images.find(profile => profile.image === userId);
 
   return (
     <View style={styles.pageContainer}>
-      <View style={styles.topBar}>
-        <Text style={styles.dateText}>{currentDate}</Text>
-            <Pressable onPress={handlePress}>
-              <Image
-                source={{ uri: userProfile?.image }}
-                style={styles.profileImage}
-              />
-            </Pressable>
-      </View>
       <ScrollView contentContainerStyle={styles.grid}>
         <BlockProgress />
         <BlockChart />
