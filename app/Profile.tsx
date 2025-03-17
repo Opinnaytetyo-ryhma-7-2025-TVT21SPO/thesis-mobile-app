@@ -9,7 +9,7 @@ export default function UserProfileScreen() {
   const { isDarkMode } = useTheme();
   const styles = getStyles();
   const navigation = useNavigation();
-  const { userId } = useLocalSearchParams();
+  const userId = Math.floor(Math.random() * 4 + 1).toString();
 
   useEffect(() => {
           if (isDarkMode) {
@@ -43,9 +43,6 @@ export default function UserProfileScreen() {
       ) : (
       <Text style={styles.usernameText}>User not found</Text>
       )}
-      <TouchableOpacity >
-      <Text style={styles.settingsButtonText}>Go to Settings</Text>
-      </TouchableOpacity>
     </View>
   );
 }

@@ -4,6 +4,7 @@ import { icons } from '../assets/icons';
 import { getStyles } from './styles';
 import { useTheme } from '../components/ThemeContext';
 import Animated, { interpolate, withSpring, useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import { LabelPosition } from '@react-navigation/bottom-tabs/lib/typescript/commonjs/src/types';
 
 interface TabBarButtonProps {
   routeName: string;
@@ -12,6 +13,7 @@ interface TabBarButtonProps {
   primaryColor: string;
   secondaryColor: string;
   color: string;
+  position: LabelPosition
 }
 
 const TabBarButton = (props: TabBarButtonProps) => {

@@ -73,7 +73,7 @@ function TabLayoutContent() {
       }}
       />
       <Tabs.Screen
-      name="[recipe]"
+      name="RecipeDetail"
       options={{
         href: null,
       }}

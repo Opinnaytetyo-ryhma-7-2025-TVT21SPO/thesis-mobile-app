@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react';
 import { ImageSourcePropType } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-interface ImageCacherProps {
-    uri: string;
-}
+type ImageCacherProps = {
+  source: { uri: string };
+  style?: object;
+  className?: string;
+  uri: string;
+};
 
 const ImageCacher: React.FC<ImageCacherProps> = (props) => {
     const [cachedSource, setCachedSource] = useState<ImageSourcePropType | null>(null);
@@ -43,7 +46,8 @@ const ImageCacher: React.FC<ImageCacherProps> = (props) => {
         return null;
     }
 
-    return <Animated.Image source={cachedSource} {...props} />;
+    const { source, ...restProps } = props;
+    return <Animated.Image source={cachedSource} {...restProps} />;
 };
 
 export default ImageCacher;

@@ -42,7 +42,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           ? options.title
           : route.name;
 
-      if(['index', '_sitemap', '+not-found', '[recipe]', 'x_layout'].includes(route.name)) {
+      if(['index', '_sitemap', '+not-found', '[recipe]', 'x_layout', 'RecipeDetail'].includes(route.name)) {
         return null;
       }
 
