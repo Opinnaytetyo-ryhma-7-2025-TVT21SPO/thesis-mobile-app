@@ -1,0 +1,11 @@
+name: Build preview
+
+  # Ajamalla eas workflow:run *insert tämän tiedoston polku* voidaan tehdä preview buildi
+
+jobs:
+  android_development_build:
+    name: Build Android
+    type: build
+    params:
+      platform: android
+      profile: preview

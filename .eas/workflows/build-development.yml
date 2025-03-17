@@ -1,4 +1,4 @@
-name: Create development builds
+name: Build development
 
   # Ajamalla eas workflow:run *insert tämän tiedoston polku* voidaan tehdä development buildi
 
