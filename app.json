@@ -39,8 +39,7 @@
       [
         "expo-build-properties",
         {
-          "android": {
-          }
+          "android": {}
         }
       ]
     ],
@@ -54,6 +53,12 @@
       "eas": {
         "projectId": "ed714cbb-c3dc-45b5-9903-b132dea2f6aa"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ed714cbb-c3dc-45b5-9903-b132dea2f6aa"
     }
   }
 }
