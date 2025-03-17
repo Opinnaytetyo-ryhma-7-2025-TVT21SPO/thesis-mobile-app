@@ -1,19 +1,18 @@
-import React from 'react';
-import { ThemeProvider } from '../components/ThemeContext';
-import { DarkTheme, DefaultTheme } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack, Tabs, Link } from 'expo-router';
+import React, { useEffect } from 'react';
+import { Tabs } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { useFonts } from 'expo-font';
+import { ThemeProvider, useTheme } from '@/components/ThemeContext';
+import { useColorScheme } from 'react-native';
+import { getStyles } from '@/components/styles';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Entypo from '@expo/vector-icons/Entypo';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import TabBar from '../components/TabBar';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function TabLayout() {
+function TabLayoutContent() {
+  const { isDarkMode } = useTheme();
+  const styles = getStyles();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -29,19 +28,76 @@ export default function TabLayout() {
     return null;
   }
 
+
+  return (
+    <Tabs
+      tabBar={props => <TabBar {...props} />}
+      screenOptions={({ route }) => ({
+      headerShown: false,
+      gsturesEnabled: false,
+      swipeEnabled: false,
+      tabBarActiveTintColor: isDarkMode ? '#fff' : '#000',
+      tabBarStyle: {
+        backgroundColor: isDarkMode ? '#000' : '#fff',
+        display: route.name === 'index' ? 'none' : 'flex',
+      },
+      })}
+    >
+      <Tabs.Screen
+      name="index"
+      options={{
+        title: 'index',
+        href: null,
+      }}
+      />
+      <Tabs.Screen
+      name="Home"
+      options={{
+        title: 'Home',
+        tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+      }}
+      />
+      <Tabs.Screen
+      name="SettingsScreen"
+      options={{
+        title: 'Settings',
+        tabBarIcon: ({ color }) => <AntDesign size={28} name="setting" color={color} />,
+        href: null,
+      }}
+      />
+      <Tabs.Screen
+      name="RecipeScreen"
+      options={{
+        title: 'Recipes',
+        tabBarIcon: ({ color }) => <Entypo name="book" size={24} color={color} />,
+      }}
+      />
+      <Tabs.Screen
+      name="RecipeDetail"
+      options={{
+        href: null,
+      }}
+      />
+      <Tabs.Screen
+      name="x_layout"
+      options={{
+        href: null,
+      }}
+      />
+      <Tabs.Screen
+      name="+not-found"
+      options={{
+        href: null,
+      }}
+      />
+    </Tabs>
+  );
+}
+
+export default function TabLayout() {
   return (
     <ThemeProvider>
-      <Stack>
-        <Stack.Screen 
-          name="index"
-          options={{
-            headerShown: false,
-            title: 'Login',
-          }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown : false }} />
-        <Stack.Screen name="+not-found" />"
-      </Stack>
-      <StatusBar style="auto" />
+      <TabLayoutContent />
     </ThemeProvider>
   );
 }

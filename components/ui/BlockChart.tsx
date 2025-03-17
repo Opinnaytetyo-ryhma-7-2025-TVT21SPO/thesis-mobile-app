@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, LayoutChangeEvent, useColorScheme } from 'react-native';
+import { View, LayoutChangeEvent } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { getStyles } from '../styles';
 import { useTheme } from '../ThemeContext';
 
-interface BlockProps {
-  onDelete: () => void;
-}
-
-const Block: React.FC<BlockProps> = ({ onDelete }) => {
+const BlockChart: React.FC = () => {
   const [blockDimensions, setBlockDimensions] = useState({ width: 0, height: 0 });
   const { isDarkMode } = useTheme();
   const styles = getStyles();
-
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -59,11 +54,8 @@ const Block: React.FC<BlockProps> = ({ onDelete }) => {
           borderRadius: 14,
         }}
       />
-      <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
-        <Text style={styles.deleteButtonText}>X</Text>
-      </TouchableOpacity>
     </View>
   );
 };
 
-export default Block;
+export default BlockChart;
