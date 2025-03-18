@@ -1,7 +1,4 @@
 name: Build production
-
-  # Ajamalla eas workflow:run *insert tämän tiedoston polku* voidaan tehdä production buildi
-
 jobs:
   android_development_build:
     name: Build Android
@@ -9,3 +6,5 @@ jobs:
     params:
       platform: android
       profile: production
+# Tämä Workflow rakentaa tuotantoproton sovelluksesta. Ota huomioon että tuotantoproton voi asentaa vain kaupasta.
+# Workflowin voi ajaa manuaalisesti komennolla 'eas workflow:run .eas\workflows\build-production.yml'

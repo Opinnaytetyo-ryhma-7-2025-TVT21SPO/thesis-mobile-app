@@ -1,7 +1,4 @@
 name: Build preview
-
-  # Ajamalla eas workflow:run *insert tämän tiedoston polku* voidaan tehdä preview buildi
-
 jobs:
   android_development_build:
     name: Build Android
@@ -9,3 +6,5 @@ jobs:
     params:
       platform: android
       profile: preview
+# Tämä workflow rakentaa esikatseluprototyypin sovelluksesta. Se ei sisällä kehitystyökaluja, mutta sopii tuotannon esikatseluun.
+# Workflowin voi ajaa manuaalisesti komennolla 'eas workflow:run .eas\workflows\build-preview.yml'

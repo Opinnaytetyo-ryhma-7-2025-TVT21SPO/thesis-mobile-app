@@ -15,5 +15,5 @@ jobs:
     params:
       platform: android
       build_id: ${{ needs.build_android.outputs.build_id }}
-
-      
+# Tämä Workflow tekee submitin google play storeen.
+# Workflowin voi ajaa manuaalisesti komennolla 'eas workflow:run .eas\workflows\submit-android.yml'

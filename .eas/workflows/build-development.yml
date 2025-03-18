@@ -1,7 +1,4 @@
 name: Build development
-
-  # Ajamalla eas workflow:run *insert tämän tiedoston polku* voidaan tehdä development buildi
-
 jobs:
   android_development_build:
     name: Build Android
@@ -9,3 +6,5 @@ jobs:
     params:
       platform: android
       profile: development
+# Tämä workflow rakentaa kehitysprototyypin sovelluksesta, jossa on käytössä kehitystyökalut.
+# Workflowin voi ajaa manuaalisesti komennolla 'eas workflow:run .eas\workflows\build-development.yml'

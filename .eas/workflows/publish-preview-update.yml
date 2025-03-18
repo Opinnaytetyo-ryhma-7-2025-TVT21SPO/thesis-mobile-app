@@ -2,11 +2,11 @@ name: Publish preview update
 on:
   push:
     branches: ['*']
-  # Generoi esikatselun puskusta mille tahansa haaralle.
 jobs:
   publish_preview_update:
     name: Publish preview update
     type: update
     params:
       branch: ${{ github.ref || 'test' }}
-      
+# Tämä workflow tekee esikatseltavan päivityksen. Niihin pääsee käsiksi joko kehitysprototyypin extensioista, tai dashboardista.
+# Workflowin voi ajaa manuaalisesti komennolla 'eas workflow:run .eas\workflows\publish-preview-update.yml'
