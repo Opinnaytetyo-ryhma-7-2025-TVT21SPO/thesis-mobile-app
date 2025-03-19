@@ -48,7 +48,8 @@ export const RecipeScreen = () => {
   const getCategories = async () => {
     try{
       // const response = await axios.get('https://themealdb.com/api/json/v1/1/categories.php')
-      const response = await axios.get('http://localhost:5000/recipes/categories/filtered')
+      // const response = await axios.get('http://localhost:5000/recipes/categories/filtered')
+      const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/recipes/categories/filtered`)
       /* console.log('got categories: ',response.data) */
       if (response && response.data){
         setCategories(response.data)
@@ -62,7 +63,7 @@ export const RecipeScreen = () => {
     setKeepSpinning(true);
     try{
       // const response = await axios.get(`https://themealdb.com/api/json/v1/1/filter.php?c=${category}`)
-      const response = await axios.get(`http://localhost:5000/recipes/filtered/${category}`)
+      const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/recipes/filtered/${category}`)
       /* console.log('got meals: ',response.data) */
       if (response && response.data.message == 'none'){
         setKeepSpinning(false);
@@ -95,7 +96,7 @@ export const RecipeScreen = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 50}}
-        className="space-y-6 pt-14"
+        className="space-y-6 pt-14 w-[50%]"
       >
         {/* Search bar */}
         <View 
