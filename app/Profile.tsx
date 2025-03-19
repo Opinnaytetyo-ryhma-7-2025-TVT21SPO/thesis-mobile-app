@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StatusBar, Pressable, useColorScheme } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getStyles } from '../components/styles';
 import { useTheme } from '../components/ThemeContext';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
+import axios from 'axios';
 
 export default function UserProfileScreen() {
   const { isDarkMode } = useTheme();
@@ -30,6 +32,7 @@ export default function UserProfileScreen() {
 
   const userProfile = profiles.find(profile => profile.userId === userId);
 
+  const colorScheme = useColorScheme() ? 'dark' : 'light';
   return (
     <View style={styles.pageContainer}>
       {userProfile ? (
@@ -43,6 +46,22 @@ export default function UserProfileScreen() {
       ) : (
       <Text style={styles.usernameText}>User not found</Text>
       )}
+      <Pressable 
+              className='flex items-center' 
+              onPress={() => {
+                {/*login logic here*/}
+              console.log('Google login pressed');
+                // router.push('/Home');
+                // axios.get('http://localhost:5000/auth/google')
+                window.location.href = 'http://localhost:5000/auth/logout';
+                }}
+            >
+              <AntDesign 
+              name="google" 
+              size={24} 
+              color={colorScheme === 'dark' ? 'white' : 'black'} 
+              />
+            </Pressable>
     </View>
   );
 }

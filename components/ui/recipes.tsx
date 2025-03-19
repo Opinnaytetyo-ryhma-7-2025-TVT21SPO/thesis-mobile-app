@@ -13,27 +13,31 @@ import { Route, useNavigation } from 'expo-router';
 
 
 type RecipeCardProps = {
-    strMealThumb: any;
-    idMeal: any;
-    strMeal: any;
+    imageUrl: any;
+    _id: any;
+    nameEnglish: any;
     navigation: any;
     route: any;
 };
 interface RecipesProps {
     categories: Array<any>;
     meals: Array<RecipeCardProps>;
-
+    keepSpinning: boolean;
 }
 
 interface ItemProps {
     item: RecipeCardProps
 }
 
-export default function Recipes({ categories, meals }: RecipesProps) {
+export default function Recipes({ categories, meals, keepSpinning }: RecipesProps) {
   const [isLoadingNext, setIsLoadingNext] = useState(false);
   const styles = getStyles();
   const { isDarkMode } = useTheme();
   const navigation = useNavigation();
+
+  console.log('OLLAAN RESEPTIKOMENNOSSA APUA')
+  console.log(categories.length);
+  console.log(meals.length);
 
   return (
     <View className="mx-4 space-y-3">
@@ -42,12 +46,13 @@ export default function Recipes({ categories, meals }: RecipesProps) {
     className={`semi-bold ${isDarkMode ? 'text-white' : undefined}`}>Recipes</Text>
       <View>
         {
-            categories.length == 0 || meals.length == 0 ? (
+            
+            keepSpinning ? (
                 <Loading size="large" className="mt-20"/>
             ) : (
                 <MasonryList
                     data={meals}
-                    keyExtractor={(item): string => item.idMeal}
+                    keyExtractor={(item): string => item._id}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
                     renderItem= {({ item, i }) => (
@@ -80,9 +85,9 @@ const RecipeCard = ({item, index, navigation}: {item: any; index: number, naviga
             <Pressable
                 style={{width: '100%', paddingLeft: isEven? 0 : 8, paddingRight: isEven? 8 : 0}}
                 className="flex justify-center mb-4 space-y-1"
-                onPress={() => navigation.navigate('RecipeDetail', {item})}
+                onPress={() => navigation.navigate('RecipeDetail', item)}
                 >
-                    <Image source={{uri: item.strMealThumb}}
+                    <Image source={{uri: item.imageUrl}}
                         style={{width: "100%", height: index%3==0? hp(25):hp(35), borderRadius: 35}}
                         className="bg-black/5">
                     </Image>
@@ -95,7 +100,7 @@ const RecipeCard = ({item, index, navigation}: {item: any; index: number, naviga
                         style={Platform.OS === 'web' ? styles.categoryTitle : {fontSize: hp(2)}}
                         className={`font-semibold ml-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
                         {
-                            item.strMeal.length > 20 ? item.strMeal.slice(0, 20) + '...' : item.strMeal
+                            item.nameEnglish.length > 20 ? item.nameEnglish.slice(0, 20) + '...' : item.nameEnglish
                         }
                     </Text>
             </Pressable>

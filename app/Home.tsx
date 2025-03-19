@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, Image, Pressable, StatusBar } from 'react-native';
+import { View, ScrollView, Text, Image, Pressable, StatusBar, useColorScheme } from 'react-native';
 import { Link, router, useLocalSearchParams, useNavigation } from 'expo-router';
 import BlockChart from '../components/ui/BlockChart';
 import BlockProgress from '../components/ui/BlockProgress';
 import { getStyles } from '../components/styles';
 import { useTheme } from '../components/ThemeContext';
+import { AntDesign } from '@expo/vector-icons';
+import axios from 'axios';
 
 export default function HomeScreen() {
   const { isDarkMode } = useTheme();
@@ -44,11 +46,33 @@ export default function HomeScreen() {
 
   const userProfile = images.find(profile => profile.image === userId);
 
+  const colorScheme = useColorScheme() || 'light';
   return (
     <View style={styles.pageContainer}>
       <ScrollView contentContainerStyle={styles.grid}>
         <BlockProgress />
         <BlockChart />
+        <Pressable 
+              className='flex items-center' 
+              onPress={() => {
+                {/*login logic here*/}
+              console.log('Google login pressed');
+                // router.push('/Home');
+                // axios.get('http://localhost:5000/auth/google')
+                axios.get('http://localhost:5000/protected', { withCredentials: true }).then((res) => {
+                  console.log(res);
+                
+              })}}
+            >
+              <AntDesign 
+              name="google" 
+              size={24} 
+              color={colorScheme === 'dark' ? 'white' : 'black'} 
+              />
+            </Pressable>
+            <Text style={{ color: colorScheme === 'dark' ? 'white' : 'black' }}>
+              Login with Google
+            </Text>
       </ScrollView>
     </View>
   );

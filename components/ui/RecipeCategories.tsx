@@ -10,13 +10,17 @@ import "../../global.css";
 interface RecipeCategoriesProps {
     activeCategory: string;
     handleChangeCategory: (category: string) => void;
-    categories: Array<{ idCategory: string; strCategory: string; strCategoryThumb: string; strCategoryDescription: string }>;
+    // categories: Array<{ idCategory: string; strCategory: string; strCategoryThumb: string; strCategoryDescription: string }>;
+    categories: Array<{ termEnglish: string }>;
+    keepSpinning: boolean;
     }
 
-const RecipeCategories: React.FC<RecipeCategoriesProps> = ({ categories, activeCategory, handleChangeCategory }) => {
+const RecipeCategories: React.FC<RecipeCategoriesProps> = ({ categories, activeCategory, handleChangeCategory, keepSpinning }) => {
 
     const styles = getStyles();
     const { isDarkMode } = useTheme();
+
+    const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
   return (
     <Animated.View entering={FadeInDown.duration(500).springify()}>
@@ -27,29 +31,31 @@ const RecipeCategories: React.FC<RecipeCategoriesProps> = ({ categories, activeC
         contentContainerStyle={{paddingHorizontal: 15}}
         >
         {
+            keepSpinning == true ? undefined : 
             categories.map((category, index) => {
-                let isActive = category.strCategory == activeCategory;
+                let isActive = category.termEnglish == activeCategory;
                 let activeButtonClass = isActive ? 'bg-[#3d3ded]' : undefined;
                 return (
                     <TouchableOpacity
                         key={index}
-                        onPress={() => handleChangeCategory(category.strCategory)}
+                        onPress={() => handleChangeCategory(category.termEnglish)}
                         className="flex items-center space-y-1"
                     >
                         <View className={"rounded-full p-[6px] " +activeButtonClass}>
-                            <Image
+                            {/* <Image
                                 source={{uri: category.strCategoryThumb}}
                                 style={{height: hp(6), width: hp(6)}}
                                 className="rounded-full">
 
-                            </Image>
-                        </View>
-                        <Text 
+                            </Image> */}
+                            <Text 
                             className={`${isDarkMode ? 'text-white' : undefined}`} 
                             style={Platform.OS === 'web' ? styles.categoryTitle : undefined}
                         >
-                            {category.strCategory}
+                            {capitalizeFirstLetter(category.termEnglish)}
                         </Text>
+                        </View>
+                        
                     </TouchableOpacity>
                 )
             })

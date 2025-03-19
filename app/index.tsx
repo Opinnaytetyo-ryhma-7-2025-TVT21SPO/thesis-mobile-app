@@ -3,9 +3,10 @@ import { useFonts } from 'expo-font';
 import { View, Pressable, Image, Text, useColorScheme, StatusBar } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { AntDesign } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { getStyles } from '../components/styles';
 import "../global.css";
+import axios from 'axios';
 
 
 
@@ -36,8 +37,9 @@ export default function LoginScreen() {
               onPress={() => {
                 {/*login logic here*/}
               console.log('Google login pressed');
-                router.push('/Home');
-              
+                // router.push('/Home');
+                // axios.get('http://localhost:5000/auth/google')
+                window.location.href = 'http://localhost:5000/auth/google';
               }}
             >
               <AntDesign 
@@ -48,6 +50,25 @@ export default function LoginScreen() {
             </Pressable>
             <Text style={{ color: colorScheme === 'dark' ? 'white' : 'black' }}>
               Login with Google
+            </Text>
+            <Pressable 
+              className='flex items-center' 
+              onPress={() => {
+                {/*login logic here*/}
+              console.log('Guest login pressed');
+                router.push('/Home');
+                
+              
+              }}
+            >
+              <AntDesign 
+              name="google" 
+              size={24} 
+              color={colorScheme === 'dark' ? 'white' : 'black'} 
+              />
+            </Pressable>
+            <Text style={{ color: colorScheme === 'dark' ? 'white' : 'black' }}>
+              Guest access
             </Text>
           </Animated.View>
       </View>

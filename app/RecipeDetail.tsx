@@ -5,7 +5,8 @@ import { getStyles } from '../components/styles'
 import { Platform } from 'react-native'
 
 const RecipeDetail = (props) => {
-  console.log(props.route.params)
+  console.log("APUAAAAAAAAAAAAAAAAAAAAAAAA");
+  console.log(props)
 
   const { isDarkMode } = useTheme();
   const styles = getStyles();
