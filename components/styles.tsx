@@ -145,5 +145,12 @@ export const getStyles = () => {
       alignItems: 'center',
       marginVertical: 10,
     },
+    profileFieldContainer: {
+      display: "flex",
+      flexDirection: "row",
+      gap: 12,
+      justifyContent: "space-between",
+      marginTop: 1
+    }
   });
 };

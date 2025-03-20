@@ -15,14 +15,14 @@ const BlockChart: React.FC = () => {
   };
 
   const generateRandomData = () => {
-    return Array.from({ length: 6 }, () => Math.floor(Math.random() * 100));
+    return Array.from({ length: 7 }, () => Math.floor(Math.random() * 100));
   };
 
   return (
     <View onLayout={handleLayout} style={styles.blockContainer}>
       <LineChart
         data={{
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          labels: ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat', 'Sun'],
           datasets: [
             {
               data: generateRandomData(),
