@@ -98,83 +98,10 @@ export default function UserProfileScreen() {
     getUserData()
   }, [reload])
 
-  const Load = () => {
-    if (loading) {
-      return (
-        <Text>Loading user data...</Text>
-      )
-    }
 
-    return (
-      <View>
-        {userData ? (
-          <View>
-            <View style={styles.profileFieldContainer}>
-              <Text>Name: </Text>
-              <TextInput 
-                value={username}
-                onChangeText={setUsername}
-              />
-            </View>
-            <View style={styles.profileFieldContainer}>
-              <Text>Height: </Text>
-              <TextInput 
-                value={userheight}
-                onChangeText={setUserheight}
+      
+    
 
-              />
-            </View>
-            <View style={styles.profileFieldContainer}>
-              <Text>Weight: </Text>
-              <TextInput 
-                value={userweight}
-                onChangeText={setUserweight}
-
-              />
-            </View>
-            <View style={styles.profileFieldContainer}>
-              <Text>Gender: </Text>
-              <TextInput 
-                value={usergender}
-                onChangeText={setUsergender}
-
-              />
-            </View>
-            <View style={styles.profileFieldContainer}>
-              <Text>Allergies: </Text>
-              <TextInput 
-                value={userallergies}
-                onChangeText={setUserallergies}
-
-              />
-            </View>
-            <View style={styles.profileFieldContainer}> 
-              <Text>Activity level: </Text>
-              <TextInput
-                value={useractivitylvl}
-                onChangeText={setUseractivitylvl}
-
-              />  
-            </View>
-          </View>
-
-        ) : (
-          <View>
-            <Text>Name not found</Text>
-            <Text>Height not found</Text>
-            <Text>Weight not found</Text>
-            <Text>Gender not found</Text>
-            <Text>Allergies not found</Text>
-            <Text>Activity level not found</Text>
-          </View>
-        )}
-        <View>
-          <Button onPress={editUser} color="#00f" title='Save user data'/>
-          {/* <Button onPress={deleteUser} color="#f00" title='Delete User Data' disabled={userData===null}/> */}
-        </View>
-      </View>
-    )
-  }
 
   useEffect(() => {
           if (isDarkMode) {
@@ -207,7 +134,83 @@ export default function UserProfileScreen() {
         style={styles.profileImageLarge}
         />
         <Text style={styles.usernameText}>{userProfile.username}</Text>
-        <Load/>
+
+        <View>
+        {userData ? (
+          <View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Name: </Text>
+              <TextInput 
+                placeholder='Enter Name'
+                value={username}
+                onChangeText={setUsername}
+              />
+            </View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Height: </Text>
+              <TextInput 
+                placeholder='Enter Height in cm'
+                value={userheight}
+                onChangeText={setUserheight}
+
+              />
+            </View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Weight: </Text>
+              <TextInput 
+                placeholder='Enter Weight in kg'
+                value={userweight}
+                onChangeText={setUserweight}
+
+              />
+            </View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Gender: </Text>
+              <TextInput 
+                placeholder='Enter Gender'
+                value={usergender}
+                onChangeText={setUsergender}
+
+              />
+            </View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Allergies: </Text>
+              <TextInput 
+                placeholder='Enter Allergies'
+                value={userallergies}
+                onChangeText={setUserallergies}
+
+              />
+            </View>
+            <View style={styles.profileFieldContainer}> 
+              <Text>Activity level: </Text>
+              <TextInput
+                placeholder='Enter Activity level'
+                value={useractivitylvl}
+                onChangeText={setUseractivitylvl}
+
+              />  
+            </View>
+          </View>
+
+        ) : (
+          <View>
+            <Text>Name not found</Text>
+            <Text>Height not found</Text>
+            <Text>Weight not found</Text>
+            <Text>Gender not found</Text>
+            <Text>Allergies not found</Text>
+            <Text>Activity level not found</Text>
+          </View>
+        )}
+        <View>
+          <Button onPress={editUser} color="#00f" title='Save user data'/>
+           <Button onPress={deleteUser} color="#f00" title='Delete User Data' disabled={userData===null}/>
+        </View>
+      </View>
+
+
+
       </>
       ) : (
       <Text style={styles.usernameText}>User not found</Text>
