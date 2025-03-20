@@ -15,26 +15,29 @@ export default function UserProfileScreen() {
   const userId = Math.floor(Math.random() * 4 + 1).toString();
 
   interface IUserData {
-    name: string,
+    username: string,
     height: string,
     weight: string,
     gender: string,
     allergies: string,
-    activitylvl: string
+    activitylvl: string,
+    activityHistory: number
   }
 
   const [userData, setUserData] = useState<IUserData | null>(null)
 
-  const [username, setUsername] = useState<string>('')
-  const [userheight, setUserheight] = useState<string>('')
-  const [userweight, setUserweight] = useState<string>('')
-  const [usergender, setUsergender] = useState<string>('')
-  const [userallergies, setUserallergies] = useState<string>('')
-  const [useractivitylvl, setUseractivitylvl] = useState<string>('')
+  const [uname, setUname] = useState<string>('')
+  const [uheight, setUheight] = useState<string>('')
+  const [uweight, setUweight] = useState<string>('')
+  const [ugender, setUgender] = useState<string>('')
+  const [uallergies, setUallergies] = useState<string>('')
+  const [uactivitylvl, setUactivitylvl] = useState<string>('')
+  const [editmode, setEditmode] = useState<boolean>(false)
+  const [activityHistory, setActivityHistory] = useState<number>(0)
 
 
 
-  const [loading, setLoading] = useState<boolean>(true)
+
   const [reload, setReload] = useState<number>(0)
 
   async function deleteUser() {
@@ -42,30 +45,46 @@ export default function UserProfileScreen() {
       console.log(`Deleting User`)
       await AsyncStorage.removeItem('user')
       console.log(`User Deleted`)
-      setReload(reload + 1)
-      console.log(reload)
     } catch(e){
       console.log(`Storage Error: ${e}`)
+    } finally{
+      setReload(reload + 1)
+      console.log(reload)
     }
   }
 
   async function editUser() {
+    setEditmode(true)   
+  }
+
+  async function saveEdit() {
     try{
       const user = {
-        name: username,
-        height: userheight,
-        weight: userweight,
-        gender: usergender,
-        allergies: userallergies,
-        activitylvl: useractivitylvl
+        username: uname,
+        height: uheight,
+        weight: uweight,
+        gender: ugender,
+        allergies: uallergies,
+        activitylvl: uactivitylvl,
+        activityHistory: activityHistory,
       }
-      console.log(`Creating  User`)
+      console.log(`Editing  User`)
       await AsyncStorage.setItem('user', JSON.stringify(user))
-      console.log(`User Created`)
-      setReload(reload + 1)
-      console.log(reload)
+      console.log(`User Edited`)
     } catch (e) {
       console.log(`Storage Error: ${e}`)
+    } finally{
+      setEditmode(false)
+      setReload(reload + 1)
+      console.log(reload)
+    }
+  }
+
+  const viewing = () => {
+    if (editmode) {
+      return (
+        <Text>Loading user data...</Text>
+      )
     }
   }
 
@@ -78,30 +97,25 @@ export default function UserProfileScreen() {
         if (user) {
           const userContent = JSON.parse(user) as IUserData
           console.log(`User Data Got`)
-          setUsername(userContent.name)
-          setUserheight(userContent.height)
-          setUserweight(userContent.weight)
-          setUsergender(userContent.gender)
-          setUserallergies(userContent.allergies)
-          setUseractivitylvl(userContent.activitylvl)
-
+          setUname(userContent.username)
+          setUheight(userContent.height)
+          setUweight(userContent.weight)
+          setUgender(userContent.gender)
+          setUallergies(userContent.allergies)
+          setUactivitylvl(userContent.activitylvl)
+          console.log('User Data: ', userContent)
           return setUserData(userContent)
+        } else{
+          setUserData(null)
+          console.log('No User Data Found')
         }
 
       } catch (e){
         console.log(`Storage Error: ${e}`)
       }
-      finally {
-        setLoading(false)
-      }
     }
     getUserData()
   }, [reload])
-
-
-      
-    
-
 
   useEffect(() => {
           if (isDarkMode) {
@@ -137,62 +151,87 @@ export default function UserProfileScreen() {
 
         <View>
         {userData ? (
-          <View>
+          editmode ? (
+            <View>
             <View style={styles.profileFieldContainer}>
               <Text>Name: </Text>
               <TextInput 
                 placeholder='Enter Name'
-                value={username}
-                onChangeText={setUsername}
+                value={uname}
+                onChangeText={setUname}
               />
             </View>
             <View style={styles.profileFieldContainer}>
               <Text>Height: </Text>
               <TextInput 
                 placeholder='Enter Height in cm'
-                value={userheight}
-                onChangeText={setUserheight}
-
+                value={uheight}
+                onChangeText={setUheight}
               />
             </View>
             <View style={styles.profileFieldContainer}>
               <Text>Weight: </Text>
               <TextInput 
                 placeholder='Enter Weight in kg'
-                value={userweight}
-                onChangeText={setUserweight}
-
+                value={uweight}
+                onChangeText={setUweight}
               />
             </View>
             <View style={styles.profileFieldContainer}>
               <Text>Gender: </Text>
               <TextInput 
                 placeholder='Enter Gender'
-                value={usergender}
-                onChangeText={setUsergender}
-
+                value={ugender}
+                onChangeText={setUgender}
               />
             </View>
             <View style={styles.profileFieldContainer}>
               <Text>Allergies: </Text>
               <TextInput 
                 placeholder='Enter Allergies'
-                value={userallergies}
-                onChangeText={setUserallergies}
-
+                value={uallergies}
+                onChangeText={setUallergies}
               />
             </View>
             <View style={styles.profileFieldContainer}> 
               <Text>Activity level: </Text>
               <TextInput
                 placeholder='Enter Activity level'
-                value={useractivitylvl}
-                onChangeText={setUseractivitylvl}
-
+                value={uactivitylvl}
+                onChangeText={setUactivitylvl}
               />  
             </View>
           </View>
 
+          ) : (
+
+            <View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Name: </Text>
+              <Text>{uname}</Text>
+            </View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Height: </Text>
+              <Text>{uheight}</Text>
+            </View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Weight: </Text>
+              <Text>{uweight}</Text>
+            </View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Gender: </Text>
+              <Text>{ugender}</Text>
+            </View>
+            <View style={styles.profileFieldContainer}>
+              <Text>Allergies: </Text>
+              <Text>{uallergies}</Text>
+            </View>
+            <View style={styles.profileFieldContainer}> 
+              <Text>Activity level: </Text>
+              <Text>{uactivitylvl}</Text>
+            </View>
+          </View>   
+          )
         ) : (
           <View>
             <Text>Name not found</Text>
@@ -204,13 +243,11 @@ export default function UserProfileScreen() {
           </View>
         )}
         <View>
-          <Button onPress={editUser} color="#00f" title='Save user data'/>
-           <Button onPress={deleteUser} color="#f00" title='Delete User Data' disabled={userData===null}/>
+          <Button onPress={editUser} color="#0f0" title='Edit User'disabled={editmode===true}/>
+          <Button onPress={saveEdit} color="#00f" title='Save Edit' disabled={editmode===false}/>
+          <Button onPress={deleteUser} color="#f00" title='Delete User' disabled={userData===null}/>
         </View>
       </View>
-
-
-
       </>
       ) : (
       <Text style={styles.usernameText}>User not found</Text>

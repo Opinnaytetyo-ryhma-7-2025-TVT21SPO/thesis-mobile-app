@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, Image, Pressable, StatusBar, useColorScheme } from 'react-native';
+import { View, ScrollView, Text, Image, Pressable, StatusBar, useColorScheme, TextInput, Button } from 'react-native';
 import { Link, router, useLocalSearchParams, useNavigation } from 'expo-router';
 import BlockChart from '../components/ui/BlockChart';
 import BlockProgress from '../components/ui/BlockProgress';
@@ -7,12 +7,34 @@ import { getStyles } from '../components/styles';
 import { useTheme } from '../components/ThemeContext';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen() {
   const { isDarkMode } = useTheme();
   const styles = getStyles();
   const { userId } = useLocalSearchParams();
   const [images, setImage] = useState<{ image: string }[]>([]);
+
+  const [userData, setUserData] = useState<IUserData | null>(null)
+  const [reload, setReload] = useState<number>(0)
+  
+  interface IUserData {
+    username: string,
+    dietData: Object,
+    historyData: Object,
+    createdAt: Date,
+    updatedAt: Date,
+    __V: 0,
+    isAdmin: true
+  }
+
+   const [uname, setUname] = useState<string>('')
+    const [uallergies, setUallergies] = useState<any[]>([])
+    const [udiets, setUdiets] = useState<any[]>([])
+    const [uFav, setUFav] = useState<any[]>([])
+    const [urecipes, setUrecipes] = useState<any[]>([])
+    const [umeals, setUmeals] = useState<any[]>([])
+    const [uactivity, setUactivity] = useState<any[]>([])
 
   useEffect(() => {
       // Fetch data from the database
@@ -35,6 +57,23 @@ export default function HomeScreen() {
     }, []);
 
     useEffect(() => {
+      async function getUserData(){
+        try {
+          console.log(`Getting User Data`)
+          const user = await AsyncStorage.getItem('user')
+          if (user) {
+            const userContent = JSON.parse(user) as IUserData
+            console.log(`User Data Got`)
+            return setUserData(userContent)
+          }
+        } catch (e){
+          console.log(`Storage Error: ${e}`)
+        }
+      }
+      getUserData()
+    }, [reload])
+
+    useEffect(() => {
         if (isDarkMode) {
           StatusBar.setBackgroundColor('#171717');
           StatusBar.setBarStyle('light-content');
@@ -52,6 +91,17 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={styles.grid}>
         <BlockProgress />
         <BlockChart />
+        <View style={styles.profileFieldContainer}>
+          <Text>Add Activity: </Text>
+          <Button title="+1 Activity"/>
+        </View>
+        <View style={styles.profileFieldContainer}>
+          <Text>Add measurement: </Text>
+          <TextInput
+            placeholder='Weight in Kg'
+          />
+          </View>
+          
         <Pressable 
               className='flex items-center' 
               onPress={() => {
@@ -72,7 +122,7 @@ export default function HomeScreen() {
             </Pressable>
             <Text style={{ color: colorScheme === 'dark' ? 'white' : 'black' }}>
               Login with Google
-            </Text>
+            </Text>            
       </ScrollView>
     </View>
   );
