@@ -53,9 +53,6 @@ export const getStyles = () => {
     categoryTitle: {
       color: isDarkMode ? '#fff' : '#000',
     },
-    recipeTitle: {
-      color: isDarkMode ? '#fff' : '#000',
-    },
     profileImageLarge: {
       width: 100,
       height: 100,
@@ -151,6 +148,46 @@ export const getStyles = () => {
       gap: 12,
       justifyContent: "space-between",
       marginTop: 1
+    },
+    modalOverlay: {
+      flex: 1,
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+      backgroundColor: 'transparent',
+    },
+    menu: {
+      position: 'absolute',
+      width: 80,
+      backgroundColor: 'white',
+      borderRadius: 5,
+      padding: 10,
+      shadowColor: '#000',
+      shadowOffset: {width: 0, height: 2},
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 4,
+    },
+    menuOption: {
+      padding: 5,
+    },
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#f5fcff',
+    },
+    triggerStyle: {
+      height: 40,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: 100,
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      borderRadius: 5,
+    },
+    triggerText: {
+      fontSize: 16,
     }
   });
 };
