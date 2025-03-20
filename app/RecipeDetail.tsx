@@ -17,9 +17,13 @@ export default function RecipeDetail(props) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [recipe, setRecipe] = useState(null);
-
+  const [alreadySearched, setAlreadySearched] = useState(false);
   useEffect(()=> {
-    getRecipeData(item._id);
+    if(!alreadySearched){
+      console.log('finding recipe')
+      getRecipeData(item._id);
+      setAlreadySearched(true);
+    } else { console.log('häh')}
   })
 
   const { isDarkMode } = useTheme();
@@ -28,10 +32,11 @@ export default function RecipeDetail(props) {
   const getRecipeData = async (_id) => {
     try{
       // const response = await axios.get(`https://themealdb.com/api/json/v1/1/filter.php?c=${category}`)
-      const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/recipes/67d6abe1f24d84f8e83087c2`)
+      const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/recipes/${_id}`)
       console.log('got meals: ',response.data)
       if(response && response.data){
-        setRecipe(response.data.ingredientsFinnish[0])
+        console.log(response.data.ingredientsFinnish)
+        setRecipe(response.data)
         setLoading(false);
       }
 
@@ -40,17 +45,18 @@ export default function RecipeDetail(props) {
     }
   }
 
-const ingredientsIndexes = (recipe) => {
-  /* if(!recipe) return [];
-  let indexes = [];
-  for(let i = 1; i<=recipe.length; i++){
-    if(recipe[i]){
-      indexes.push(i);
-    }
-  }
-  return indexes; */
-  console.log(recipe)
-}
+// const ingredientsIndexes = (recipe) => {
+//    if(!recipe) return [];
+//   let indexes = [];
+//   for(let i = 0; i<recipe.length; i++){
+//     if(recipe[i]){
+//       indexes.push(i);
+//     }
+//   }
+//   return indexes;
+//   console.log('moi')
+//   console.log(recipe)
+// }
 
   return (
     <ScrollView
@@ -88,7 +94,7 @@ const ingredientsIndexes = (recipe) => {
             {/* name */}
             <View className="space-y-2">
               <Text style={{fontSize: hp(3)}} className='font-bold flex-1 text-neutral-700'>
-                {/* {RESEPTIN NIMI} */}
+                {/* recipes.nameFinnish */}
               </Text>
             </View>
 
@@ -162,21 +168,22 @@ const ingredientsIndexes = (recipe) => {
                   Ainesosat
                </Text>
                <View className='space-y-2 ml-3'>
-                {/* {
-                  ingredientsIndexes(recipe).map(i=>{
+                {
+                  
+                  recipe.ingredientsFinnish.map(ingredient=>{
                     return (
-                      <View key={i} className="flex-row space-x-4">
+                      <View key={ingredient} className="flex-row space-x-4">
                         <View style={{height: hp(1.5), width: hp(1.5)}}
                           className='bg-[#f7b333] rounded-full'>
                             <View className="flex-row space-x-2">
-                              <Text>{recipe['mitta string tähän'+i]}</Text>
-                              <Text>{recipe['ingredientsFinnish'+i]}</Text>
+                              {/* <Text>{recipe['mitta string tähän'+i]}</Text> */}
+                              <Text>{ingredient}</Text>
                             </View>
                         </View>
                       </View>
                     )
                   })
-                } */}
+                }
                </View>
             </View>
           </View>
