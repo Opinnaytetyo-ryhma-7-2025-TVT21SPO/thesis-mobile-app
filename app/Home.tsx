@@ -50,6 +50,7 @@ export default function HomeScreen() {
           if (user) {
             const userContent = JSON.parse(user)
             console.log(`User Data Got`)
+            console.log(userContent.initialized)
             return setUserData(userContent)
           }
         } catch (e){
@@ -77,15 +78,17 @@ export default function HomeScreen() {
       
       <ScrollView contentContainerStyle={styles.grid}>
         <View className="m-20">
-          {userData.initialized !== null ? <Text>Go to your profile to get started!</Text> :
+          {userData.initialized !== true ? <Text>Go to your profile to get started!</Text> :
           undefined}
           </View>
         
 
-        {userData.initialized !== null ? undefined :
-          <BlockActivityChart />}
+        {/* {userData.initialized !== null ? undefined :
+          <BlockActivityChart />} */}
+          <BlockActivityChart />
 
-        {userData.weightHistory !== null || userData.weightHistory.length !== 0 ? undefined : <BlockWeightChart /> }
+        {/* {userData.weightHistory !== null || userData.weightHistory.length !== 0 ? undefined : <BlockWeightChart /> } */}
+        <BlockWeightChart/>
           
       </ScrollView>
     </View>
