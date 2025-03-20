@@ -9,6 +9,7 @@ import RecipeCategories from '@/components/ui/RecipeCategories'
 import axios from 'axios';
 import "../global.css";
 import Recipes from '@/components/ui/recipes'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const RecipeScreen = () => {
   const { isDarkMode } = useTheme();
@@ -17,13 +18,23 @@ export const RecipeScreen = () => {
   const [categories, setCategories] = useState([]);
   const [meals, setMeals] = useState([]);
   const [keepSpinning, setKeepSpinning] = useState(true);
+  const [allergies, setAllergies] = useState<Array<Object>>([]);
+
 
   //this is deprecated
   const [keepSpinningItSeppo, setKeepSpinningItSeppo] = useState(true);
 
   useEffect(()=> {
+    getAsyncStorageUserData();
     getCategories();
     getRecipes();
+    if (isDarkMode) {
+      StatusBar.setBackgroundColor('#171717');
+      StatusBar.setBarStyle('light-content');
+    } else {
+      StatusBar.setBackgroundColor('#f2f2f2');
+      StatusBar.setBarStyle('dark-content');
+    }
   },[]);
 
   interface Category {
@@ -44,7 +55,18 @@ export const RecipeScreen = () => {
     setActiveCategory(category);
     setMeals([]);
   };
-
+  const getAsyncStorageUserData = async () => {
+    try {
+      console.log(`Getting User Data`)
+      const user = await AsyncStorage.getItem('user')
+      if (user) {
+        const userContent = JSON.parse(user)
+        setAllergies(userContent.allergies)
+      }
+    } catch (e){
+      console.log(`Storage Error: ${e}`)
+    }
+} 
   const getCategories = async () => {
     try{
       // const response = await axios.get('https://themealdb.com/api/json/v1/1/categories.php')
@@ -52,13 +74,32 @@ export const RecipeScreen = () => {
       const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/recipes/categories/filtered`)
       /* console.log('got categories: ',response.data) */
       if (response && response.data){
-        setCategories(response.data)
+        
+        if(allergies.length!==0) {
+          console.log('allergies')
+          console.log(allergies)
+          let filteredCategories = [];
+          for (let i = 0; i < response.data.length; i++) {
+            let currentCategory = response.data[i];
+            console.log(currentCategory.termEnglish)
+            if(!allergies.includes(currentCategory.termEnglish)){
+              filteredCategories.push(currentCategory)
+            }
+          }
+          setCategories(filteredCategories)
+        } else {
+          console.log('no allergies')
+          setCategories(response.data)
+        }
+        
+        
       }
     }catch(e){
       console.log('error: ', e)
     }
   }
-  
+ 
+
   const getRecipes = async (category="potato") => {
     setKeepSpinning(true);
     try{
@@ -68,7 +109,35 @@ export const RecipeScreen = () => {
       if (response && response.data.message == 'none'){
         setKeepSpinning(false);
       } else if (response && response.data){
-        setMeals(response.data);
+
+
+        if(allergies.length!==0) {
+          console.log('allergies')
+          console.log(allergies)
+          let filteredRecipes = [];
+          for (let i = 0; i < response.data.length; i++) {
+            let currentRecipe = response.data[i];
+            console.log(currentRecipe.ingredientsEnglish)
+            let allergic = false;
+            for (let u = 0; u < currentRecipe.ingredientsEnglish.length ; u++ ){
+              if(allergies.includes(currentRecipe.ingredientsEnglish[u])){
+                allergic = true;
+              }
+            }
+            for (let u = 0; u < currentRecipe.allergens.length ; u++ ){
+              if(allergies.includes(currentRecipe.allergens[u])){
+                allergic = true;
+              }
+            }
+            if(!allergic){
+              filteredRecipes.push(currentRecipe)
+            }
+          }
+          setMeals(filteredRecipes)
+        } else {
+          console.log('no allergies')
+          setMeals(response.data)
+        }
         setKeepSpinning(false);
         console.log('set meals');
         console.log(response.data);
@@ -77,16 +146,6 @@ export const RecipeScreen = () => {
       console.log('error: ', e)
     }
   }
-
-  useEffect(() => {
-          if (isDarkMode) {
-            StatusBar.setBackgroundColor('#171717');
-            StatusBar.setBarStyle('light-content');
-          } else {
-            StatusBar.setBackgroundColor('#f2f2f2');
-            StatusBar.setBarStyle('dark-content');
-          }
-        }, []);
 
   return (
     <View
