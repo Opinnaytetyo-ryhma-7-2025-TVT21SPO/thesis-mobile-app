@@ -211,5 +211,15 @@ export const getStyles = () => {
       borderWidth: 2,
       borderColor: '#3941b3',
     },
+    blockTitle: {
+      position: 'absolute',
+      top: 0,
+      backgroundColor: '#0a7ea4',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 20,
+      borderCurve: 'continuous',
+      padding: 5
+    },
   });
 };
