@@ -11,13 +11,20 @@ import { HeartIcon } from 'react-native-heroicons/solid';
 import axios from 'axios';
 import Loading from '@/components/ui/loading';
 
-export default function RecipeDetail(props) {
+interface RecipeProps {
+  uri: string;
+  source: string;
+}
+
+export default function RecipeDetail(props: RecipeProps) {
   let item = useLocalSearchParams();
   const [isFavourite, setIsFavourite] = useState(false);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [recipe, setRecipe] = useState(null);
   const [alreadySearched, setAlreadySearched] = useState(false);
+  const [image, setImage] = useState(null);
+
   useEffect(()=> {
     if(!alreadySearched){
       console.log('finding recipe')
@@ -35,9 +42,10 @@ export default function RecipeDetail(props) {
       const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/recipes/${_id}`)
       console.log('got meals: ',response.data)
       if(response && response.data){
-        console.log(response.data.ingredientsFinnish)
+        console.log(response.data.ingredientsEnglish)
         setRecipe(response.data)
         setLoading(false);
+        setImage(response.data.imageUrl)
       }
 
     }catch(e){
@@ -67,10 +75,10 @@ export default function RecipeDetail(props) {
       <StatusBar style={"light"}/>
       {/* recipe image */}
       <View className="flex-row justify-center">
-        <Text>RecipeDetail</Text>
         <Image
-          /* uri={KUVA TÄNNE} */
-          style={{width: wp(98), height: hp(50), borderRadius: 53, borderBottomLeftRadius: 40, borderBottomRightRadius: 40, marginTop: 4}}/>
+          source={{ uri: image != null ? image : ''}}
+          style={{width: wp(98),maxWidth: wp(50) , height: hp(50), borderRadius: 53, borderBottomLeftRadius: 40, borderBottomRightRadius: 40, marginTop: 4}}>
+        </Image>
       </View>
 
       {/* back button */}
@@ -109,7 +117,7 @@ export default function RecipeDetail(props) {
                 </View>
                 <View className="flex items-center py-2 space-y-1">
                   <Text style={{fontSize: hp(2)}} className='font-bold text-neutral-700'>
-                    Aika
+                    15
                   </Text>
                   <Text style={{fontSize: hp(1.3)}} className='font-bold text-neutral-700'>
                     min
@@ -125,10 +133,10 @@ export default function RecipeDetail(props) {
                 </View>
                 <View className="flex items-center py-2 space-y-1">
                   <Text style={{fontSize: hp(2)}} className='font-bold text-neutral-700'>
-                    Annos
+                    4
                   </Text>
                   <Text style={{fontSize: hp(1.3)}} className='font-bold text-neutral-700'>
-                    kpl
+                    servings
                   </Text>
                 </View>
               </View>
@@ -141,7 +149,9 @@ export default function RecipeDetail(props) {
                 </View>
                 <View className="flex items-center py-2 space-y-1">
                   <Text style={{fontSize: hp(2)}} className='font-bold text-neutral-700'>
-                    6513
+                    {
+                      recipe?.macros.calories
+                    }
                   </Text>
                   <Text style={{fontSize: hp(1.3)}} className='font-bold text-neutral-700'>
                     kcal
@@ -157,34 +167,46 @@ export default function RecipeDetail(props) {
                 </View>
                 <View className="flex items-center py-2 space-y-1">
                   <Text style={{fontSize: hp(2)}} className='font-bold text-neutral-700'>
-                    Vaikeus
+                    Easy
                   </Text>
                 </View>
               </View>
             </View>
             {/* ingredients */}
-            <View className="space-y-4">
-               <Text style={{fontSize: hp(2.5)}} className='font-bold flex-1 text-neutral-700'>
-                  Ainesosat
+            <View className="space-y-2">
+               <Text style={{fontSize: hp(2.5)}} className={`font-bold flex-1 ${isDarkMode ? 'text-white' : 'text-neutral-600'}`}>
+                  Ingredients
                </Text>
                <View className='space-y-2 ml-3'>
                 {
                   
-                  recipe.ingredientsFinnish.map(ingredient=>{
+                  recipe.ingredientsEnglish.map(ingredient=>{
                     return (
                       <View key={ingredient} className="flex-row space-x-4">
                         <View style={{height: hp(1.5), width: hp(1.5)}}
-                          className='bg-[#f7b333] rounded-full'>
+                          className='bg-[#f7b333] rounded-full'/>
                             <View className="flex-row space-x-2">
                               {/* <Text>{recipe['mitta string tähän'+i]}</Text> */}
-                              <Text>{ingredient}</Text>
+                              <Text style={{fontSize: hp(2)}} className={`font-extrabold ${isDarkMode ? 'text-white' : 'text-neutral-600'} `}>{ingredient}</Text>
                             </View>
-                        </View>
                       </View>
                     )
                   })
                 }
                </View>
+            </View>
+
+            {/* instructions */}
+            <View className="space-y-4">
+               <Text style={{fontSize: hp(2.5)}} className={`font-bold flex-1 ${isDarkMode ? 'text-white' : 'text-neutral-700'} `}>
+                  Instructions
+               </Text>
+               <Text style={{fontSize: hp(2)}} className={`font-bold flex-1 ${isDarkMode ? 'text-white' : 'text-neutral-700'} `}>
+                {
+                  recipe?.instructionsEnglish
+                }
+
+               </Text>
             </View>
           </View>
         )
