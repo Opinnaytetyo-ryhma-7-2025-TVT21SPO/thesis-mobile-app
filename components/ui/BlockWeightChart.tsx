@@ -11,6 +11,9 @@ const BlockChartWeight: React.FC = () => {
   const styles = getStyles();
   const [userWeightHistory, setUserWeightHistory] = useState([])
   const [alreadyLoadedData, setAlreadyLoadedData] = useState(false);
+  const [labelFixed, setLabelFixed] = useState([])
+  const [datasetFixed, setDatasetFixed] = useState([])
+
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -24,6 +27,23 @@ const BlockChartWeight: React.FC = () => {
       if (user) {
         const userContent = JSON.parse(user)
         if(userContent.weightHistory) {
+          let newDataset = [];
+          let newLabels = [];
+
+          const formatDate = new Intl.DateTimeFormat("en" , {
+            day: "2-digit",
+            month: "2-digit"
+          });
+
+          for(let i = 0; i < userContent.weightHistory.length; i++){
+            let currentWeightMeasurement = userContent.weightHistory[i]
+            newDataset.push(currentWeightMeasurement.weight)
+            const formattedDate = formatDate.format(new Date(currentWeightMeasurement.time))
+            newLabels.push(formattedDate);
+          }
+          setDatasetFixed(newDataset);
+          setLabelFixed(newLabels);
+
           setUserWeightHistory(userContent.weightHistory)
         }
       }
@@ -50,10 +70,10 @@ const BlockChartWeight: React.FC = () => {
     <View onLayout={handleLayout} style={styles.blockContainer}>
       <LineChart
         data={{
-          labels: ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat', 'Sun'],
+          labels: labelFixed,
           datasets: [
             {
-              data: userWeightHistory,
+              data: datasetFixed,
             },
           ],
         }}

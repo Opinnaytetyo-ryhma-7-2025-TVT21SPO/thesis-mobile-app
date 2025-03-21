@@ -17,10 +17,10 @@ export default function UserProfileScreen() {
   interface IUserData {
     height: number,
     weight: number,
+    weightHistory: Array<Object>
     age: number,
     allergies: Array<String>
-    activitylvl: string,
-    activityHistory: number,
+    activityHistory: Array<Object>,
     sex: string,
     bmr: number,
   }
@@ -30,12 +30,12 @@ export default function UserProfileScreen() {
   const [uheight, setUheight] = useState<number>(0)
   const [uweight, setUweight] = useState<number>(0)
   const [uage, setUage] = useState<number>(0)
-  const [uallergies, setUallergies] = useState<String[]>([])
-  const [uactivitylvl, setUactivitylvl] = useState<string>('')
+  const [uallergies, setUallergies] = useState<String>("")
   const [editmode, setEditmode] = useState<boolean>(false)
   const [isMale, setIsMale] = useState<string>('');
   const [reload, setReload] = useState<number>(0)
   const [bmr, setBmr] = useState<number>(0)
+  const [weightHistory, setWeightHistory] = useState<Array<Object>>([])
 
   async function deleteUser() {
     try{
@@ -49,10 +49,8 @@ export default function UserProfileScreen() {
       setUweight(0)
       setUage(0)
       setIsMale('')
-      setUallergies([''])
-      setUactivitylvl('')
+      setUallergies('')
       setEditmode(false)
-      setReload(reload + 1)
       console.log(reload)
     }
   }
@@ -65,7 +63,6 @@ export default function UserProfileScreen() {
         weight: uweight,
         age: uage,
         allergies: uallergies,
-        activitylvl: uactivitylvl,
         sex: isMale,
         bmr: bmr
       }
@@ -75,19 +72,28 @@ export default function UserProfileScreen() {
       console.log(`Storage Error: ${e}`)
     } finally{
       setReload(reload + 1)
+      getUserData();
+      parseAllergies();
+      calculateBMR();
       console.log(reload)
     }
   }
   async function saveEdit() {
     try{
+
+      const allergiesArray = await saveAllergies(uallergies)
+      let weightHistoryArray = await AsyncStorage.getItem('weightHistory')
+      let newWeightHistory = []
+      newWeightHistory.concat(weightHistoryArray)
+      newWeightHistory.push({weight: uweight, time: Date.now()})
+
       const user = {
         height: uheight,
         weight: uweight,
+        weightHistory: newWeightHistory,
         age: uage,
-        allergies: uallergies,
-        activitylvl: uactivitylvl,
+        allergies: allergiesArray,
         sex: isMale,
-        bmr: bmr,
         initialized: true,
       }
       console.log(`Editing  User`)
@@ -97,40 +103,69 @@ export default function UserProfileScreen() {
       console.log(`Storage Error: ${e}`)
     } finally{
       setEditmode(false)
-      setReload(reload + 1)
-      console.log(reload)
+      getUserData();
+      parseAllergies();
+      calculateBMR();
     }
   }
-  useEffect(() => {
-    async function getUserData(){
-      try {
-        console.log(`Getting User Data`)
-        const user = await AsyncStorage.getItem('user')
 
-        if (user) {
-          const userContent = JSON.parse(user) as IUserData
-          console.log(`User Data Got`)
-          setUheight(userContent.height)
-          setUweight(userContent.weight)
-          setUage(userContent.age)
-          setUallergies(userContent.allergies)
-          setUactivitylvl(userContent.activitylvl)
-          setIsMale(userContent.sex)
-          setBmr(userContent.bmr)
-          console.log('User Data: ', userContent)
-          return setUserData(userContent)
-        } else{
-          setUserData(null)
-          console.log('No User Data Found')
-        }
+  async function getUserData(){
+    try {
+      console.log(`Getting User Data`)
+      const user = await AsyncStorage.getItem('user')
 
-      } catch (e){
-        console.log(`Storage Error: ${e}`)
+      if (user) {
+        const userContent = JSON.parse(user) as IUserData
+        console.log(`User Data Got`)
+        setUheight(userContent.height)
+        setUweight(userContent.weight)
+        setWeightHistory(weightHistory.concat(userContent.weightHistory))
+        setUage(userContent.age)
+        setIsMale(userContent.sex)
+        console.log('User Data: ', userContent)
+        return setUserData(userContent)
+      } else{
+        setUserData(null)
+        console.log('No User Data Found')
       }
+      parseAllergies();
+      calculateBMR()
+    } catch (e){
+      console.log(`Storage Error: ${e}`)
     }
-    calculateBMR()
+  }
+
+  useEffect(() => {
     getUserData()
-  }, [reload])
+    
+  }, [])
+
+  const parseAllergies = async () =>  {
+    const currentUserData = await AsyncStorage.getItem('user')
+    const currentAllergiesArray = currentUserData.allergies
+    let newAllergiesString = ""
+    if(currentAllergiesArray){
+      for (let i = 0; i < currentAllergiesArray.length; i++) {
+        if(newAllergiesString !== ""){
+          newAllergiesString = newAllergiesString + ", "
+        }
+        newAllergiesString = newAllergiesString + currentAllergiesArray[i]
+      }
+      setUallergies(newAllergiesString)
+    }
+    
+  }
+
+  const saveAllergies = async (userInput) => {
+    if(userInput == ''){
+      return userInput;
+    }
+    let userInputString = userInput;
+    let userInputArray = userInputString.split(',')
+    let cleanedUserInputArray = userInputArray.map((str: string) => str.trim());
+    return cleanedUserInputArray;
+  }
+
 
   useEffect(() => {
           if (isDarkMode) {
@@ -172,31 +207,35 @@ export default function UserProfileScreen() {
         style={styles.profileImageLarge}
         />
           <Text style={styles.usernameText}>{userProfile.username}</Text>
-            <View>
+            {
+              bmr == 0 || editmode == true ? undefined :
+              <View>
             <View style={styles.profileFieldContainer}>
-              <Text>Maintain Weight</Text>
-              <Text>{bmr}</Text>
+              <Text style={styles.profileText}>Maintain Weight</Text>
+              <Text style={styles.profileText}>{bmr}cal</Text>
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Mild Weight Loss</Text>
-              <Text>{bmr * 0.87}</Text> 
+              <Text style={styles.profileText}>Mild Weight Loss</Text>
+              <Text style={styles.profileText}>{bmr * 0.87}cal</Text> 
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Weight Loss</Text>
-              <Text>{bmr * 0.75}</Text> 
+              <Text style={styles.profileText}>Weight Loss</Text>
+              <Text style={styles.profileText}>{bmr * 0.75}cal</Text> 
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Extreme Weight Loss</Text>
-              <Text>{bmr * 0.50}</Text> 
+              <Text style={styles.profileText}>Extreme Weight Loss</Text>
+              <Text style={styles.profileText}>{bmr * 0.50}cal</Text> 
             </View>
           </View>
+}
         <View>
         {userData ? (
           editmode ? (
             <View>
             <View style={styles.profileFieldContainer}>
-              <Text>Height in cm: </Text>
-              <TextInput 
+              <Text style={styles.profileText}>Height in cm: </Text>
+              <TextInput
+                style={styles.profileText} 
                 defaultValue={uheight.toString()}
                 onChange={(event)=>{
                    const num = parseFloat(event.nativeEvent.text)
@@ -211,8 +250,9 @@ export default function UserProfileScreen() {
               />
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Weight in Kg: </Text>
+              <Text style={styles.profileText}>Weight in Kg: </Text>
               <TextInput 
+                style={styles.profileText}
                 defaultValue={uweight.toString()}
                 onChange={(event)=>{
                    const num = parseFloat(event.nativeEvent.text)
@@ -227,8 +267,9 @@ export default function UserProfileScreen() {
               />
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Age: </Text>
+              <Text style={styles.profileText}>Age: </Text>
               <TextInput 
+                style={styles.profileText}
                 defaultValue={uage.toString()}
                 onChange={(event)=>{
                    const num = parseFloat(event.nativeEvent.text)
@@ -242,17 +283,26 @@ export default function UserProfileScreen() {
                 value={uage.toString()}
               />
             </View>
-            <View style={styles.profileFieldContainer}> 
-              <Text>Activity level: </Text>
+            <View style={styles.profileFieldContainer}>
+              <Text style={styles.profileText}>Allergies: </Text>
               <TextInput
-                placeholder='Enter Activity level'
-                value={uactivitylvl}
-                onChangeText={setUactivitylvl}
-              />  
+                style={styles.profileText} 
+                defaultValue={uallergies as string}
+                onChange={(event)=>{
+                   const text = event.nativeEvent.text
+                  
+                  setUallergies(text)
+                }}
+                keyboardType="default"
+                value={uallergies as string}
+              />
             </View>
             <View style={styles.profileFieldContainer}> 
-              <Button onPress={() => setIsMale('male')} color="#87cefa" title='Male'disabled={isMale==='male'}/>
-              <Button onPress={() => setIsMale('female')} color="#db7093" title='Female'disabled={isMale==='female'}/>
+            <View style={styles.buttonView}>
+              <Button onPress={() => setIsMale('male')} color='#0a7ea4' title='Male'disabled={isMale==='male'}/>
+            </View>
+            <View style={styles.buttonView}></View>
+              <Button onPress={() => setIsMale('female')} color="#673ab7" title='Female'disabled={isMale==='female'}/>
             </View>
           </View>
 
@@ -260,56 +310,51 @@ export default function UserProfileScreen() {
 
             <View>
             <View style={styles.profileFieldContainer}>
-              <Text>Height: </Text>
-              <Text>{uheight} cm</Text>
+              <Text style={styles.profileText}>Height: </Text>
+              <Text style={styles.profileText}>{uheight} cm</Text>
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Weight: </Text>
-              <Text>{uweight} Kg</Text>
+              <Text style={styles.profileText}>Weight: </Text>
+              <Text style={styles.profileText}>{uweight} Kg</Text>
             </View>
             <View style={styles.profileFieldContainer}> 
-              <Text>Age: Yrs</Text>
-              <Text>{uage}</Text>
+              <Text style={styles.profileText}>Age:</Text>
+              <Text style={styles.profileText}>{uage}</Text>
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Allergies: </Text>
-              <Text>{uallergies}</Text>
+              <Text style={styles.profileText}>Allergies: </Text>
+              <Text style={styles.profileText}>{uallergies}</Text>
             </View>
             <View style={styles.profileFieldContainer}> 
-              <Text>Activity level: </Text>
-              <Text>{uactivitylvl}</Text>
+              <Text style={styles.profileText}>Sex: </Text>
+              <Text style={styles.profileText}>{isMale}</Text>
             </View>
             <View style={styles.profileFieldContainer}> 
-              <Text>Sex: </Text>
-              <Text>{isMale}</Text>
-            </View>
-            <View style={styles.profileFieldContainer}> 
-              <Text>BMR: </Text>
-              <View>{bmr}</View>
+              <Text style={styles.profileText}>BMR: </Text>
+              <View style={styles.profileText}>{bmr}cal</View>
             </View>
             
           </View>   
           )
         ) : (
           <View>
-            <Text>Height not found</Text>
-            <Text>Weight not found</Text>
-            <Text>Age not found</Text>
-            <Text>Allergies not found</Text>
-            <Text>Activity level not found</Text>
-            <Text>Sex not found</Text>
-            <Text>BMR not calculated</Text>
+            <Text style={styles.profileText}>Height not found</Text>
+            <Text style={styles.profileText}>Weight not found</Text>
+            <Text style={styles.profileText}>Age not found</Text>
+            <Text style={styles.profileText}>Allergies not found</Text>
+            <Text style={styles.profileText}>Sex not found</Text>
+            <Text style={styles.profileText}>BMR not calculated</Text>
 
           </View>
         )}
-        <View>
-          {editmode !== true ? <Button onPress={editUser} color="#daa520" title='Edit User'/> : undefined}
+        <View style={styles.buttonView}>
+          {editmode !== true ? <Button onPress={editUser} color='#e26a00' title='Edit User'/> : undefined}
         </View>
-        <View>
-        {editmode !== false ? <Button onPress={saveEdit} color="#228b22" title='Save Edit'/> : undefined}
+        <View style={styles.buttonView}>
+        {editmode !== false ? <Button onPress={saveEdit} color='#e26a00' title='Save Edit'/> : undefined}
         </View>
-        <View>
-        {editmode !== false ? <Button onPress={deleteUser} color="#ff4500" title='Delete User'/> : undefined}
+        <View style={styles.buttonView}>
+        {editmode !== false ? <Button onPress={deleteUser} color='#e26a00' title='Delete User'/> : undefined}
         </View>
       </View>
       </>
