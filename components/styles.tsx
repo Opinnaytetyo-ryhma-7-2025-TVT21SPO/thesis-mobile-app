@@ -188,6 +188,28 @@ export const getStyles = () => {
     },
     triggerText: {
       fontSize: 16,
-    }
+    },
+    profileText: {
+      fontSize: 12,
+      fontWeight: 'bold',
+      color: isDarkMode ? '#fff' : '#000',
+      marginBottom: 16,
+    },
+    buttonView: {
+      padding: 5,
+    },
+    blockButton: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      backgroundColor: '#3941b3',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 2,
+      borderColor: '#3941b3',
+    },
   });
 };

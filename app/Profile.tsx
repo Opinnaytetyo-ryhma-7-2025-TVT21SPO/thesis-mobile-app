@@ -211,20 +211,20 @@ export default function UserProfileScreen() {
               bmr == 0 || editmode == true ? undefined :
               <View>
             <View style={styles.profileFieldContainer}>
-              <Text>Maintain Weight</Text>
-              <Text>{bmr}cal</Text>
+              <Text style={styles.profileText}>Maintain Weight</Text>
+              <Text style={styles.profileText}>{bmr}cal</Text>
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Mild Weight Loss</Text>
-              <Text>{bmr * 0.87}cal</Text> 
+              <Text style={styles.profileText}>Mild Weight Loss</Text>
+              <Text style={styles.profileText}>{bmr * 0.87}cal</Text> 
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Weight Loss</Text>
-              <Text>{bmr * 0.75}cal</Text> 
+              <Text style={styles.profileText}>Weight Loss</Text>
+              <Text style={styles.profileText}>{bmr * 0.75}cal</Text> 
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Extreme Weight Loss</Text>
-              <Text>{bmr * 0.50}cal</Text> 
+              <Text style={styles.profileText}>Extreme Weight Loss</Text>
+              <Text style={styles.profileText}>{bmr * 0.50}cal</Text> 
             </View>
           </View>
 }
@@ -233,8 +233,9 @@ export default function UserProfileScreen() {
           editmode ? (
             <View>
             <View style={styles.profileFieldContainer}>
-              <Text>Height in cm: </Text>
-              <TextInput 
+              <Text style={styles.profileText}>Height in cm: </Text>
+              <TextInput
+                style={styles.profileText} 
                 defaultValue={uheight.toString()}
                 onChange={(event)=>{
                    const num = parseFloat(event.nativeEvent.text)
@@ -249,8 +250,9 @@ export default function UserProfileScreen() {
               />
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Weight in Kg: </Text>
+              <Text style={styles.profileText}>Weight in Kg: </Text>
               <TextInput 
+                style={styles.profileText}
                 defaultValue={uweight.toString()}
                 onChange={(event)=>{
                    const num = parseFloat(event.nativeEvent.text)
@@ -265,8 +267,9 @@ export default function UserProfileScreen() {
               />
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Age: </Text>
+              <Text style={styles.profileText}>Age: </Text>
               <TextInput 
+                style={styles.profileText}
                 defaultValue={uage.toString()}
                 onChange={(event)=>{
                    const num = parseFloat(event.nativeEvent.text)
@@ -281,8 +284,9 @@ export default function UserProfileScreen() {
               />
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Allergies: </Text>
-              <TextInput 
+              <Text style={styles.profileText}>Allergies: </Text>
+              <TextInput
+                style={styles.profileText} 
                 defaultValue={uallergies as string}
                 onChange={(event)=>{
                    const text = event.nativeEvent.text
@@ -294,8 +298,11 @@ export default function UserProfileScreen() {
               />
             </View>
             <View style={styles.profileFieldContainer}> 
-              <Button onPress={() => setIsMale('male')} color="#87cefa" title='Male'disabled={isMale==='male'}/>
-              <Button onPress={() => setIsMale('female')} color="#db7093" title='Female'disabled={isMale==='female'}/>
+            <View style={styles.buttonView}>
+              <Button onPress={() => setIsMale('male')} color='#0a7ea4' title='Male'disabled={isMale==='male'}/>
+            </View>
+            <View style={styles.buttonView}></View>
+              <Button onPress={() => setIsMale('female')} color="#673ab7" title='Female'disabled={isMale==='female'}/>
             </View>
           </View>
 
@@ -303,51 +310,51 @@ export default function UserProfileScreen() {
 
             <View>
             <View style={styles.profileFieldContainer}>
-              <Text>Height: </Text>
-              <Text>{uheight} cm</Text>
+              <Text style={styles.profileText}>Height: </Text>
+              <Text style={styles.profileText}>{uheight} cm</Text>
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Weight: </Text>
-              <Text>{uweight} Kg</Text>
+              <Text style={styles.profileText}>Weight: </Text>
+              <Text style={styles.profileText}>{uweight} Kg</Text>
             </View>
             <View style={styles.profileFieldContainer}> 
-              <Text>Age:</Text>
-              <Text>{uage}</Text>
+              <Text style={styles.profileText}>Age:</Text>
+              <Text style={styles.profileText}>{uage}</Text>
             </View>
             <View style={styles.profileFieldContainer}>
-              <Text>Allergies: </Text>
-              <Text>{uallergies}</Text>
+              <Text style={styles.profileText}>Allergies: </Text>
+              <Text style={styles.profileText}>{uallergies}</Text>
             </View>
             <View style={styles.profileFieldContainer}> 
-              <Text>Sex: </Text>
-              <Text>{isMale}</Text>
+              <Text style={styles.profileText}>Sex: </Text>
+              <Text style={styles.profileText}>{isMale}</Text>
             </View>
             <View style={styles.profileFieldContainer}> 
-              <Text>BMR: </Text>
-              <View>{bmr}cal</View>
+              <Text style={styles.profileText}>BMR: </Text>
+              <View style={styles.profileText}>{bmr}cal</View>
             </View>
             
           </View>   
           )
         ) : (
           <View>
-            <Text>Height not found</Text>
-            <Text>Weight not found</Text>
-            <Text>Age not found</Text>
-            <Text>Allergies not found</Text>
-            <Text>Sex not found</Text>
-            <Text>BMR not calculated</Text>
+            <Text style={styles.profileText}>Height not found</Text>
+            <Text style={styles.profileText}>Weight not found</Text>
+            <Text style={styles.profileText}>Age not found</Text>
+            <Text style={styles.profileText}>Allergies not found</Text>
+            <Text style={styles.profileText}>Sex not found</Text>
+            <Text style={styles.profileText}>BMR not calculated</Text>
 
           </View>
         )}
-        <View>
-          {editmode !== true ? <Button onPress={editUser} color="#daa520" title='Edit User'/> : undefined}
+        <View style={styles.buttonView}>
+          {editmode !== true ? <Button onPress={editUser} color='#e26a00' title='Edit User'/> : undefined}
         </View>
-        <View>
-        {editmode !== false ? <Button onPress={saveEdit} color="#228b22" title='Save Edit'/> : undefined}
+        <View style={styles.buttonView}>
+        {editmode !== false ? <Button onPress={saveEdit} color='#e26a00' title='Save Edit'/> : undefined}
         </View>
-        <View>
-        {editmode !== false ? <Button onPress={deleteUser} color="#ff4500" title='Delete User'/> : undefined}
+        <View style={styles.buttonView}>
+        {editmode !== false ? <Button onPress={deleteUser} color='#e26a00' title='Delete User'/> : undefined}
         </View>
       </View>
       </>
